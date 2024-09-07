@@ -23,7 +23,7 @@
       path: /usr/local/bin/helm
       mode: o=x  
   - name: download kubectl
-    ansible.builtin.command: curl -o /tmp/installkubectl https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
+    ansible.builtin.command: curl -Lo /tmp/installkubectl https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
     args:
       creates: /tmp/installkubectl
   - name: install kubectl
@@ -35,3 +35,10 @@
     ansible.builtin.command: k3d cluster create local-k8s
     args:
       creates: ~/.kube/config
+  - name: Deploy Wordpress chart from bitnami
+    kubernetes.core.helm:
+      name: wordpress
+      chart_ref: oci://registry-1.docker.io/bitnamicharts/wordpress
+      release_namespace: default
+
+
